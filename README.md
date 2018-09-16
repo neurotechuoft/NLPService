@@ -1,2 +1,2 @@
-# P300Service
-Microservice that analyzes EEG for P300 activity
+# NLPService
+Microservice that does word and emoji prediction

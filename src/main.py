@@ -10,7 +10,7 @@ sio.attach(app)
 
 @sio.on('data_event')
 async def handle_data(sid, data):
-    await sio.emit("p300_event", data)
+    await sio.emit("nlp_event", data)
 
 
 if __name__ == '__main__':

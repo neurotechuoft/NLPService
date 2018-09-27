@@ -4,6 +4,7 @@ import sys
 
 import trie_funcs
 import complete
+import nlp_setup
 
 sio = socketio.AsyncServer()
 
@@ -19,9 +20,9 @@ async def handle_data(sid, data):
 
 
 if __name__ == '__main__':
+    nlp_setup.perform_setup(True, True)
+
     if len(sys.argv) == 2:
         app.run(host='localhost', port=sys.argv[1])
     else:
         app.run(host='localhost', port=complete.test_port)
-        
-

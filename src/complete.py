@@ -27,5 +27,5 @@ if __name__ == '__main__':
 
     socket_client = SocketIO("localhost", test_port)
     socket_client.connect()
-    socket_client.emit("predict", sys.argv[1], process_predictions)
+    socket_client.emit("autocomplete", sys.argv[1], process_predictions)
     socket_client.wait_for_callbacks(seconds=1)

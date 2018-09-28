@@ -5,6 +5,7 @@ import sys
 import trie_funcs
 import complete
 import nlp_setup
+import score_texts_emojis
 
 sio = socketio.AsyncServer()
 
@@ -13,9 +14,15 @@ app = Sanic()
 sio.attach(app)
 
 
-@sio.on('predict')
+@sio.on('autocomplete')
 async def handle_data(sid, data):
     predictions = await trie_funcs.autocomplete(data)
+    return predictions
+
+
+@sio.on('predict_emojis')
+async def handle_data(sid, data):
+    predictions = await score_texts_emojis.predict_sentence_emojies(data)
     return predictions
 
 

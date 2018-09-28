@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
 
-""" Use torchMoji to score texts for emoji distribution.
-
-The resulting emoji ids (0-63) correspond to the mapping
-in emoji_overview.png file at the root of the torchMoji repo.
-
-Writes the result to a csv file.
+"""
+Use torchMoji to score texts for emoji distribution.
 """
 from __future__ import print_function, division, unicode_literals
 
@@ -44,22 +40,29 @@ def top_elements(array, k):
     return ind[np.argsort(array[ind])][::-1]
 
 
-async def predict_sentence_emojies(sentense: str) -> dict:
+async def predict_sentence_emojis(sentence: str, num_to_predict: int = 5) -> dict:
+    """
+    Predict top n emojis based on the sentence
+    :param sentence: sentence used in prediction
+    :param num_to_predict: number of top emojis to return
+    :return: Dictionary where key is predicted emoji and value is its probability
+    """
+
     with open(VOCAB_PATH, 'r') as f:
         vocabulary = json.load(f)
 
     st = SentenceTokenizer(vocabulary, MAXLEN)
 
-    print('Loading model from {}.'.format(PRETRAINED_PATH))
     model = torchmoji_emojis(PRETRAINED_PATH)
-    print(model)
     print('Running predictions.')
-    tokenized, _, _ = st.tokenize_sentences([sentense])
+    tokenized, _, _ = st.tokenize_sentences([sentence])
     prob = model(tokenized)[0]
 
-    ind_top = top_elements(prob, 5)
+    ind_top = top_elements(prob, num_to_predict)
     emojis = list(map(lambda x: EMOJIS[x], ind_top))
-    emojis_unicode_escape = [unicode_codes.EMOJI_ALIAS_UNICODE[emoj].encode('unicode-escape') for emoj in emojis]
+
+    # Might be useful if we need to send it this way
+    # emojis_unicode_escape = [unicode_codes.EMOJI_ALIAS_UNICODE[emoj].encode('unicode-escape') for emoj in emojis]
 
     emojis_unicode = [unicode_codes.EMOJI_ALIAS_UNICODE[emoj] for emoj in emojis]
     return dict(zip(emojis_unicode, prob[ind_top]))

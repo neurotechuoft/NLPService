@@ -1,11 +1,12 @@
 import codecs
 import json
-import pickle
-import numpy as np
 import marisa_trie as marisa
-import pandas as pd
-import time
 import os
+import pickle
+import time
+
+import numpy as np
+import pandas as pd
 
 resources_path = os.path.expanduser('~') + "/NLPService/src/resources/"
 

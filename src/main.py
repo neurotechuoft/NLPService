@@ -1,11 +1,12 @@
-from sanic import Sanic
-import socketio
 import sys
 
-import trie_funcs
+import socketio
+from sanic import Sanic
+
 import complete
 import nlp_setup
 import score_texts_emojis
+import trie_funcs
 
 sio = socketio.AsyncServer()
 
@@ -22,7 +23,7 @@ async def handle_data(sid, data):
 
 @sio.on('predict_emojis')
 async def handle_data(sid, data):
-    predictions = await score_texts_emojis.predict_sentence_emojies(data)
+    predictions = await score_texts_emojis.predict_sentence_emojis(data)
     return predictions
 
 

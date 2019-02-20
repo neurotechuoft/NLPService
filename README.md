@@ -2,7 +2,7 @@
 Microservice that does word and emoji prediction
 
 ## Installation
-Using Anaconda or Miniconda, create an environment (replacing with the packages listed in ```environment.yml``` with
+Using Anaconda or Miniconda, create an environment with the packages listed in ```environment.yml``` with
 ```
 conda env create -n nlp-service -f environment.yml
 ```
@@ -22,7 +22,8 @@ from socketIO_client import SocketIO
 def callback_func(*args):
     print("predictions: ", args)
 
-socket_client = SocketIO("localhost", 8001) # server running on localhost:8001
+# server running on localhost:8001
+socket_client = SocketIO("localhost", 8001)
 socket_client.connect()
 socket_client.emit("predict", "a", callback_func)
 socket_client.wait_for_callbacks(seconds=1)

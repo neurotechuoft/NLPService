@@ -1,4 +1,3 @@
-import time
 import nlp_setup
 
 
@@ -14,41 +13,41 @@ async def autocomplete(start_word, triee=None):
 
     # Get an appropriate trie
     if triee is None:
-        triee, popular_dict = nlp_setup.check_cache(start_word)\
+        triee, popular_dict = nlp_setup.check_cache(start_word)
 
     # Iterate over the trie elements that start with the start_word
     # and store the top 3 most frequent words
     item = triee.items(start_word)
     if len(start_word.split(" ")) < 1:
-        next_word = next_word_indicator(item, start_word)
+        predict_second_word = next_word_indicator(item, start_word)
     else:
-        next_word = False
+        predict_second_word = False
         item = list(map(lambda x: (x[0].replace(start_word.split(" ")[0] + " ", ""), x[1]), item))
 
     complete_word_dict = dict(item)
-    top_three = []
-    while len(top_three) < 3:
+    top_three_words = []
+    while len(top_three_words) < 3:
         if len(complete_word_dict) > 0:
-            pop_word = max(complete_word_dict, key=complete_word_dict.get)
-            complete_word_dict.pop(pop_word, None)
+            most_popular_word = max(complete_word_dict, key=complete_word_dict.get)
+            complete_word_dict.pop(most_popular_word, None)
         else:
-            pop_word = max(popular_dict, key=popular_dict.get)
-            popular_dict.pop(pop_word, None)
+            most_popular_word = max(popular_dict, key=popular_dict.get)
+            popular_dict.pop(most_popular_word, None)
 
-        if pop_word not in top_three:
-            if not next_word:
-                if pop_word.split(" ")[0] not in top_three:
-                    top_three.append(pop_word.split(" ")[0])
+        if most_popular_word not in top_three_words:
+            if not predict_second_word:
+                if most_popular_word.split(" ")[0] not in top_three_words:
+                    top_three_words.append(most_popular_word.split(" ")[0])
             else:
-                top_three.append(pop_word)
+                top_three_words.append(most_popular_word)
 
-    complete_word = top_three
+    two_gram_suggestions = top_three_words
 
     # For the case where the autocomplete predicts the next word
     results = []
     j = 0
-    while j < len(complete_word) and j < 3:
-        longer = complete_word[j].split(' ')
+    while j < len(two_gram_suggestions) and j < 3:
+        longer = two_gram_suggestions[j].split(' ')
         if len(longer) > 1 and longer[-2] in start_word:
             # Ignore the first word, which was given as an input, return only the next one
             results.append(longer[-1])
@@ -67,9 +66,3 @@ def next_word_indicator(item, word):
             return True
 
     return False
-
-
-if __name__ == "__main__":
-    start = time.time()
-    print(autocomplete("a"))
-    print((time.time() - start) * 1000)

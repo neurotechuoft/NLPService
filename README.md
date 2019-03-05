@@ -13,7 +13,7 @@ Activate the conda environment.
 
 __Server side__: run ```python main.py``` to start the server.
 
-__Client side__: connect to the server with SocketIO client and emit "predict" with a word or phrase as an argument to get word predictions. Example for predicting "a":
+__Client side__: connect to the server with SocketIO client and emit "autocomplete" with a word or phrase as an argument to get word predictions. Example for autocompleting the word "a":
 
 ```
 from socketIO_client import SocketIO
